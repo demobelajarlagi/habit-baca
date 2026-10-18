@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2f5d50">
+<title>Habit Baca</title>
+<style>
+:root{
+  --bg:#f6f3ec; --card:#ffffff; --ink:#1f2a27; --muted:#6a7571; --line:#e3ded2;
+  --accent:#2f5d50; --accent-ink:#ffffff; --soft:#e4efe9; --warn:#b4531f; --ok:#2f7d4f;
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#121816; --card:#1b2421; --ink:#eaf0ed; --muted:#97a39e; --line:#2c3935;
+        --accent:#6fc1a3; --accent-ink:#0f1a16; --soft:#23332d; --warn:#e08a55; --ok:#79d09a;}
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+body{padding:16px 16px calc(84px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
+h1{font-size:1.35rem;margin:4px 0 14px}
+h2{font-size:1.05rem;margin:0 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.muted{color:var(--muted);font-size:.9rem}
+.row{display:flex;gap:10px;align-items:center}
+.row.between{justify-content:space-between}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center}
+.stat b{display:block;font-size:1.5rem}
+.stat span{font-size:.78rem;color:var(--muted)}
+.bar{height:12px;background:var(--soft);border-radius:99px;overflow:hidden;margin:8px 0 4px}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+label{display:block;font-size:.88rem;color:var(--muted);margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;font-size:16px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+textarea{min-height:90px;resize:vertical}
+button{font:inherit;font-size:16px;border:0;border-radius:12px;padding:14px 16px;cursor:pointer;background:var(--soft);color:var(--ink);min-height:48px}
+button.primary{background:var(--accent);color:var(--accent-ink);font-weight:600;width:100%}
+button.danger{background:transparent;color:var(--warn);min-height:40px;padding:8px 10px}
+button.small{min-height:40px;padding:8px 12px;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:10px 14px;min-height:44px;border:1px solid var(--line);background:var(--bg)}
+.chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.badge{display:inline-block;font-size:.75rem;padding:2px 8px;border-radius:99px;background:var(--soft)}
+.badge.ok{color:var(--ok)} .badge.no{color:var(--warn)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;border-radius:0;background:transparent;min-height:60px;color:var(--muted);font-size:.85rem}
+nav button.on{color:var(--accent);font-weight:700}
+.help ol{margin:8px 0 0;padding-left:22px}.help li{margin:6px 0}
+.linkbtn{background:transparent;color:var(--accent);min-height:40px;padding:8px 4px;text-decoration:underline;font-size:.95rem}
+.notice{background:var(--soft);color:var(--ink);border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:.92rem}
+.err{color:var(--warn);font-size:.9rem;margin:8px 0 0}
+.banner{background:var(--warn);color:#fff;padding:10px 12px;border-radius:12px;margin-bottom:12px;font-size:.9rem}
+.sess{padding:10px 0;border-top:1px solid var(--line)}
+.sess:first-child{border-top:0}
+.note{white-space:pre-wrap;margin-top:4px}
+.dayh{font-weight:600;margin:14px 0 6px}
+/* timer */
+.timerwrap{min-height:calc(100vh - 32px);display:flex;flex-direction:column;justify-content:center;text-align:center;gap:14px}
+.ring{width:min(78vw,300px);height:min(78vw,300px);margin:0 auto;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.big{font-size:clamp(3rem,16vw,4.6rem);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
+.modal .card{max-width:420px;width:100%;margin:0}
+.modal button{width:100%;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav id="nav"></nav>
+<div id="modal"></div>
+
+<script>
+'use strict';
+/* ====== Konfigurasi ====== */
+var BIRTHDAY = '2026-12-18';
+var TARGET_DAYS = 30;     // syarat hadiah
+var TARGET_BOOKS = 4;
+var KEY = 'habitbaca.v1';
+var GOALS = [5, 10, 15, 30];
+
+/* ====== Tanggal ====== */
+function dkey(ms){var d=new Date(ms);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function dnum(k){var p=k.split('-');return Math.round(Date.UTC(+p[0],+p[1]-1,+p[2])/86400000);}
+
+/* ====== Logika murni (diuji terpisah) ====== */
+function activeDates(sessions){var s={};sessions.forEach(function(x){s[x.date]=1;});return Object.keys(s).sort();}
+function levelFor(n){return n<=3?{lv:1,min:5}:n<=14?{lv:2,min:10}:n<=30?{lv:3,min:15}:{lv:4,min:30};}
+function todayInfo(sessions,today){
+  var dates=activeDates(sessions), isActive=dates.indexOf(today)>=0;
+  var idx=isActive?dates.indexOf(today)+1:dates.length+1;
+  var L=levelFor(idx);
+  var met=sessions.some(function(x){return x.date===today&&x.durationSec>=L.min*60;});
+  return {dates:dates,isActive:isActive,idx:idx,lv:L.lv,goalMin:L.min,met:met,bonus:idx>TARGET_DAYS};
+}
+// Bolos 1 hari dimaafkan; bolos 2 hari berturut-turut mereset ke 0.
+function streak(dates,today){
+  if(!dates.length)return 0;
+  var last=dates[dates.length-1];
+  if(dnum(today)-dnum(last)>2)return 0;
+  var n=1;
+  for(var i=dates.length-1;i>0;i--){
+    if(dnum(dates[i])-dnum(dates[i-1])<=2)n++;else break;
+  }
+  return n;
+}
+function bookProgress(book,sessions){
+  var m=0;sessions.forEach(function(s){if(s.bookId===book.id&&s.endPage>m)m=s.endPage;});
+  return m;
+}
+function lastEnd(bookId,sessions){
+  var l=null;sessions.forEach(function(s){if(s.bookId===bookId&&(!l||s.endedAt>l.endedAt))l=s;});
+  return l?l.endPage:1;
+}
+function elapsedMs(a,now){return Math.max(0,(a.stoppedAt||now)-a.startedAt-(a.pausedMs||0));}
+function fmt(ms){
+  var s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60;
+  var p=function(x){return String(x).padStart(2,'0');};
+  return (h?h+':':'')+p(m)+':'+p(sec);
+}
+function esc(t){return String(t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+var MON=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+var DAY=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+function prettyDate(k){var p=k.split('-'),d=new Date(+p[0],+p[1]-1,+p[2]);return DAY[d.getDay()]+', '+(+p[2])+' '+MON[+p[1]-1]+' '+p[0];}
+
+if(typeof module!=='undefined')module.exports={dkey:dkey,dnum:dnum,activeDates:activeDates,levelFor:levelFor,todayInfo:todayInfo,streak:streak,bookProgress:bookProgress,lastEnd:lastEnd,elapsedMs:elapsedMs,fmt:fmt};
+
+/* ====== Penyimpanan ====== */
+var storageOK=true;
+function emptyDb(){return {books:[],sessions:[],active:null};}
+function load(){
+  try{
+    localStorage.setItem('hb.test','1');localStorage.removeItem('hb.test');
+    var r=localStorage.getItem(KEY);
+    if(r){var d=JSON.parse(r);return {books:d.books||[],sessions:d.sessions||[],active:d.active||null};}
+  }catch(e){storageOK=false;}
+  return emptyDb();
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){storageOK=false;}
+}
+var db=emptyDb();
+
+/* ====== State UI ====== */
+var ui={view:'home',goal:null,bookId:null,startPage:null,histBook:'',err:'',notice:'',help:false};
+var tickTimer=null,wakeLock=null,reachedShown=false;
+var $app,$nav,$modal;
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function bookById(id){return db.books.filter(function(b){return b.id===id;})[0];}
+function openBooks(){return db.books.filter(function(b){return bookProgress(b,db.sessions)<b.total;});}
+function finishedCount(){return db.books.filter(function(b){return bookProgress(b,db.sessions)>=b.total;}).length;}
+
+/* ====== Wake Lock, bunyi, getar ====== */
+function getLock(){
+  try{
+    if(navigator.wakeLock&&!wakeLock){
+      navigator.wakeLock.request('screen').then(function(l){wakeLock=l;l.addEventListener('release',function(){wakeLock=null;});}).catch(function(){});
+    }
+  }catch(e){}
+}
+function dropLock(){try{if(wakeLock){wakeLock.release();wakeLock=null;}}catch(e){}}
+var actx=null;
+function unlockAudio(){
+  try{
+    var AC=window.AudioContext||window.webkitAudioContext;
+    if(!actx&&AC)actx=new AC();
+    if(actx&&actx.state==='suspended')actx.resume();
+  }catch(e){}
+}
+function beep(){
+  try{
+    if(!actx)return;
+    for(var i=0;i<3;i++){
+      var o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime+i*0.45;
+      o.frequency.value=880;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.4,t+0.03);g.gain.exponentialRampToValueAtTime(0.0001,t+0.3);
+      o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+0.32);
+    }
+  }catch(e){}
+  try{if(navigator.vibrate)navigator.vibrate([300,120,300,120,300]);}catch(e){}
+}
+
+/* ====== Aksi ====== */
+function startSession(){
+  var bookId=ui.bookId,b=bookById(bookId);
+  var sp=parseInt(ui.startPage,10);
+  if(!b){ui.err='Pilih buku dulu.';return render();}
+  if(!(sp>=1)||sp>b.total){ui.err='Start page harus antara 1 dan '+b.total+'.';return render();}
+  var now=Date.now();
+  db.active={bookId:bookId,startPage:sp,goalMin:ui.goal,startedAt:now,pausedMs:0,lastSeen:now,goalHandled:false,stoppedAt:null};
+  save();unlockAudio();getLock();ui.err='';ui.notice='';reachedShown=false;
+  ui.view='timer';render();
+}
+function stopSession(){
+  if(!db.active)return;
+  db.active.stoppedAt=Date.now();db.active.lastSeen=db.active.stoppedAt;save();
+  dropLock();stopTick();closeModal();
+  ui.err='';ui.view='finish';render();
+}
+function discardSession(){
+  if(!confirm('Buang sesi ini? Waktu baca tidak akan dicatat.'))return;
+  db.active=null;save();dropLock();stopTick();closeModal();ui.view='home';render();
+}
+function submitSession(){
+  var a=db.active,b=a&&bookById(a.bookId);
+  if(!a||!b)return;
+  var ep=parseInt(document.getElementById('endp').value,10);
+  var note=document.getElementById('note').value.trim();
+  if(!(ep>=a.startPage)){ui.err='End page tidak boleh lebih kecil dari start page ('+a.startPage+').';return render();}
+  if(ep>b.total){ui.err='End page melebihi total halaman buku ('+b.total+').';return render();}
+  var info=todayInfo(db.sessions,dkey(Date.now()));
+  db.sessions.push({
+    id:uid(),bookId:a.bookId,date:dkey(Date.now()),startedAt:a.startedAt,endedAt:a.stoppedAt,
+    durationSec:Math.round(elapsedMs(a,a.stoppedAt)/1000),startPage:a.startPage,endPage:ep,note:note,
+    goalMin:a.goalMin,questGoalMin:info.goalMin
+  });
+  var done=ep>=b.total;
+  db.active=null;save();ui.err='';ui.view='home';ui.bookId=null;ui.startPage=null;ui.goal=null;
+  render();
+  if(done)showModal('<h2>Buku selesai! 🎉</h2><p>"'+esc(b.title)+'" tamat. Selamat!</p><button class="primary" data-a="closeModal">Lanjut</button>');
+}
+function addBook(){
+  var t=document.getElementById('bt').value.trim(),n=parseInt(document.getElementById('bn').value,10);
+  if(!t){ui.err='Judul buku harus diisi.';return render();}
+  if(!(n>=1)){ui.err='Total halaman harus angka 1 atau lebih.';return render();}
+  var dup=db.books.some(function(b){return b.title.toLowerCase()===t.toLowerCase();});
+  if(dup){ui.err='Buku dengan judul itu sudah ada.';return render();}
+  var b={id:uid(),title:t,total:n,createdAt:Date.now()};
+  db.books.push(b);save();ui.err='';ui.bookId=b.id;ui.startPage=1;
+  ui.notice=ui.view==='books'?'Buku tersimpan. Buka tab Beranda untuk memilih goal dan mulai timer.':'Buku tersimpan. Sekarang pilih goal dan mulai timer.';
+  render();
+}
+function deleteBook(id){
+  if(db.sessions.some(function(s){return s.bookId===id;}))return;
+  if(!confirm('Hapus buku ini dari daftar?'))return;
+  db.books=db.books.filter(function(b){return b.id!==id;});save();render();
+}
+
+/* ====== Timer ====== */
+function stopTick(){if(tickTimer){clearInterval(tickTimer);tickTimer=null;}}
+function startTick(){stopTick();tickTimer=setInterval(tick,250);tick();}
+function tick(){
+  var a=db.active;if(!a||a.stoppedAt)return;
+  var now=Date.now(),el=elapsedMs(a,now),goalMs=a.goalMin?a.goalMin*60000:0;
+  if(!a.lastSave||now-a.lastSave>5000){a.lastSeen=now;a.lastSave=now;save();}
+  var t=document.getElementById('tm'),sub=document.getElementById('sub'),arc=document.getElementById('arc');
+  if(!t)return;
+  var over=goalMs&&el>=goalMs;
+  if(goalMs&&!over){t.textContent=fmt(Math.ceil((goalMs-el)/1000)*1000);sub.textContent='sisa waktu';}
+  else{t.textContent=fmt(el);sub.textContent=goalMs?'goal tercapai · lanjut membaca':'waktu membaca';}
+  if(arc){
+    var C=2*Math.PI*54,p=goalMs?Math.min(1,el/goalMs):0;
+    arc.setAttribute('stroke-dashoffset',String(C*(1-p)));
+  }
+  if(over&&!a.goalHandled&&!reachedShown){
+    reachedShown=true;beep();
+    showModal('<h2>Waktu tercapai ✓</h2><p class="muted">Goal '+a.goalMin+' menit selesai. Mau berhenti atau lanjut membaca?</p>'+
+      '<button class="primary" data-a="finish">Selesai</button><button data-a="continue">Lanjut baca</button>');
+  }
+}
+function continueReading(){
+  if(db.active){db.active.goalHandled=true;save();}
+  closeModal();
+}
+
+/* ====== Modal ====== */
+function showModal(html){$modal.innerHTML='<div class="modal"><div class="card">'+html+'</div></div>';}
+function closeModal(){$modal.innerHTML='';}
+
+/* ====== Render ====== */
+function render(){
+  $nav.style.display=(ui.view==='timer'||ui.view==='finish')?'none':'flex';
+  $nav.innerHTML=[['home','Beranda'],['books','Buku'],['history','Riwayat']].map(function(x){
+    return '<button data-a="nav" data-v="'+x[0]+'" class="'+(ui.view===x[0]?'on':'')+'">'+x[1]+'</button>';
+  }).join('');
+  var banner=storageOK?'':'<div class="banner">Penyimpanan browser tidak tersedia (mode privat?). Data tidak akan tersimpan.</div>';
+  var html='';
+  if(ui.view==='home')html=viewHome();
+  else if(ui.view==='books')html=viewBooks();
+  else if(ui.view==='history')html=viewHistory();
+  else if(ui.view==='timer')html=viewTimer();
+  else if(ui.view==='finish')html=viewFinish();
+  $app.innerHTML=banner+html;
+  if(ui.view==='timer')startTick();else stopTick();
+}
+function noticeHtml(){return ui.notice?'<div class="notice" role="status">'+esc(ui.notice)+'</div>':'';}
+function helpCard(){
+  return '<div class="card help"><h2>Cara pakai</h2>'+
+    '<div>Aplikasi ini membantu membangun kebiasaan membaca buku fisik lewat sesi timer pendek yang naik bertahap. Target: 30 hari aktif sebelum 18 Des 2026.</div>'+
+    '<ol><li><b>Tambah buku</b> (judul dan total halaman, cukup sekali per buku).</li>'+
+    '<li><b>Pilih buku dan goal menit</b>, lalu tekan Mulai timer.</li>'+
+    '<li><b>Setelah selesai</b>, isi end page lalu tekan Submit. Sesi tercatat di Riwayat.</li></ol></div>';
+}
+function helpHtml(){
+  if(!db.books.length&&!db.sessions.length)return helpCard();
+  return '<div style="margin-bottom:8px"><button class="linkbtn" data-a="help" aria-expanded="'+(ui.help?'true':'false')+'">'+(ui.help?'Tutup cara pakai':'Cara pakai')+'</button></div>'+(ui.help?helpCard():'');
+}
+function errHtml(){return ui.err?'<p class="err">'+esc(ui.err)+'</p>':'';}
+
+function viewHome(){
+  var today=dkey(Date.now()),info=todayInfo(db.sessions,today);
+  var days=dnum(BIRTHDAY)-dnum(today);
+  var cd=days>0?days+' hari lagi':days===0?'Hari ini ulang tahunmu! 🎂':'Ulang tahun sudah lewat';
+  var act=info.dates.length,pct=Math.min(100,Math.round(act/TARGET_DAYS*100));
+  var bonus=act>TARGET_DAYS?' · bonus +'+(act-TARGET_DAYS):'';
+  var goalTxt=act>=TARGET_DAYS?'Target tercapai — series buku baru layak kamu ambil 🎁':'Menuju hadiah: series buku baru';
+  var qs=info.met?'<span class="badge ok">tercapai ✓</span>':info.isActive?'<span class="badge no">sudah aktif, belum tercapai</span>':'<span class="badge">belum mulai</span>';
+  var h='<h1>Habit Baca</h1>'+helpHtml();
+  h+='<div class="card"><div class="row between"><h2>'+cd+'</h2><span class="muted">18 Des 2026</span></div>'+
+     '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+     '<div class="row between muted"><span>'+act+' / '+TARGET_DAYS+' hari aktif'+bonus+'</span><span>'+pct+'%</span></div>'+
+     '<div class="muted" style="margin-top:6px">'+goalTxt+'</div></div>';
+  h+='<div class="grid3"><div class="stat"><b>'+streak(info.dates,today)+'</b><span>streak hari</span></div>'+
+     '<div class="stat"><b>'+finishedCount()+'/'+TARGET_BOOKS+'</b><span>buku selesai</span></div>'+
+     '<div class="stat"><b>'+(info.isActive?'✓':'–')+'</b><span>hari ini</span></div></div>';
+  h+='<div class="card"><div class="row between"><h2>Quest hari ini'+(info.bonus?' · bonus':'')+'</h2>'+qs+'</div>'+
+     '<div>Level '+info.lv+': baca <b>'+info.goalMin+' menit</b></div>'+
+     '<div class="muted">Hari aktif ke-'+info.idx+'. Sesi lebih pendek tetap dihitung hari aktif.</div></div>';
+  var ob=openBooks();
+  if(!db.books.length){
+    h+='<div class="card"><h2>Langkah 1: tambah buku</h2>'+bookForm()+'</div>';
+  }else if(!ob.length){
+    h+='<div class="card"><h2>Semua buku selesai 🎉</h2><p class="muted">Tambahkan buku baru di tab Buku.</p></div>';
+  }else{
+    if(!ui.bookId||!ob.some(function(b){return b.id===ui.bookId;})){ui.bookId=ob[0].id;ui.startPage=lastEnd(ob[0].id,db.sessions);}
+    if(ui.startPage==null)ui.startPage=lastEnd(ui.bookId,db.sessions);
+    if(ui.goal===null)ui.goal=info.goalMin;
+    var b=bookById(ui.bookId);
+    h+='<div class="card">'+noticeHtml()+'<h2>Mulai membaca</h2><label>Buku</label><select id="sel">'+
+      ob.map(function(x){return '<option value="'+x.id+'"'+(x.id===ui.bookId?' selected':'')+'>'+esc(x.title)+'</option>';}).join('')+'</select>'+
+      '<label>Start page (dari '+b.total+' halaman)</label><input id="sp" type="number" inputmode="numeric" min="1" max="'+b.total+'" value="'+esc(ui.startPage)+'">'+
+      '<label>Mau baca berapa menit?</label><div class="chips">'+GOALS.map(function(g){return '<button class="chip'+(ui.goal===g?' on':'')+'" data-a="goal" data-g="'+g+'">'+g+' mnt</button>';}).join('')+
+      '<button class="chip'+(ui.goal===0?' on':'')+'" data-a="goal" data-g="0">Bebas</button></div>'+
+      errHtml()+'<div style="margin-top:14px"><button class="primary" data-a="start">Mulai timer</button></div></div>';
+  }
+  return h;
+}
+function bookForm(){
+  return '<label>Judul buku</label><input id="bt" type="text" autocomplete="off">'+
+    '<label>Total halaman</label><input id="bn" type="number" inputmode="numeric" min="1">'+
+    errHtml()+'<div style="margin-top:14px"><button class="primary" data-a="addbook">Simpan buku</button></div>';
+}
+function viewBooks(){
+  var h='<h1>Buku</h1>'+noticeHtml();
+  h+=db.books.map(function(b){
+    var p=bookProgress(b,db.sessions),pct=Math.min(100,Math.round(p/b.total*100)),n=db.sessions.filter(function(s){return s.bookId===b.id;}).length;
+    return '<div class="card"><div class="row between"><h2 style="margin:0">'+esc(b.title)+'</h2>'+(p>=b.total?'<span class="badge ok">selesai ✓</span>':'')+'</div>'+
+      '<div class="bar"><i style="width:'+pct+'%"></i></div><div class="row between muted"><span>hal. '+p+' / '+b.total+' · '+n+' sesi</span><span>'+pct+'%</span></div>'+
+      (n===0?'<div style="text-align:right"><button class="danger" data-a="delbook" data-id="'+b.id+'">Hapus</button></div>':'')+'</div>';
+  }).join('')||'<p class="muted">Belum ada buku.</p>';
+  h+='<div class="card"><h2>Tambah buku baru</h2>'+bookForm()+'</div>';
+  return h;
+}
+function viewHistory(){
+  var h='<h1>Riwayat</h1>';
+  if(db.books.length>1){
+    h+='<select id="hb" style="margin-bottom:12px"><option value="">Semua buku</option>'+
+      db.books.map(function(b){return '<option value="'+b.id+'"'+(ui.histBook===b.id?' selected':'')+'>'+esc(b.title)+'</option>';}).join('')+'</select>';
+  }
+  var list=db.sessions.filter(function(s){return !ui.histBook||s.bookId===ui.histBook;}).sort(function(a,b){return b.endedAt-a.endedAt;});
+  if(!list.length)return h+'<p class="muted">Belum ada sesi tercatat.</p>';
+  var cur='';
+  list.forEach(function(s){
+    if(s.date!==cur){cur=s.date;h+='<div class="dayh">'+prettyDate(cur)+'</div>';}
+    var b=bookById(s.bookId),met=s.durationSec>=s.questGoalMin*60;
+    h+='<div class="card sess"><div class="row between"><b>'+esc(b?b.title:'(buku dihapus)')+'</b><span class="badge '+(met?'ok':'no')+'">quest '+(met?'✓':'–')+'</span></div>'+
+      '<div class="muted">'+fmt(s.durationSec*1000)+' · hal. '+s.startPage+'–'+s.endPage+' ('+(s.endPage-s.startPage)+' hal.)</div>'+
+      (s.note?'<div class="note">'+esc(s.note)+'</div>':'')+'</div>';
+  });
+  return h;
+}
+function viewTimer(){
+  var a=db.active,b=bookById(a.bookId),C=2*Math.PI*54;
+  return '<div class="timerwrap"><div><div class="muted">Membaca</div><h2 style="margin:0">'+esc(b.title)+'</h2><div class="muted">mulai dari hal. '+a.startPage+'</div></div>'+
+    '<div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="var(--soft)" stroke-width="8"/>'+
+    '<circle id="arc" cx="60" cy="60" r="54" fill="none" stroke="var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'"/></svg>'+
+    '<div class="t"><div class="big" id="tm">00:00</div><div class="muted" id="sub"></div></div></div>'+
+    '<div class="muted">'+(a.goalMin?'Goal '+a.goalMin+' menit':'Mode bebas')+' · layar tetap menyala</div>'+
+    '<button class="primary" data-a="finish">Selesai</button><button class="danger" data-a="discard">Buang sesi</button></div>';
+}
+function viewFinish(){
+  var a=db.active,b=bookById(a.bookId);
+  return '<h1>Selesai membaca</h1><div class="card"><div class="muted">'+esc(b.title)+'</div><div class="big" style="font-size:2.4rem">'+fmt(elapsedMs(a,a.stoppedAt))+'</div></div>'+
+    '<div class="card"><label>End page (dari '+b.total+' halaman, mulai '+a.startPage+')</label>'+
+    '<input id="endp" type="number" inputmode="numeric" min="'+a.startPage+'" max="'+b.total+'" value="'+(ui.endPage||a.startPage)+'">'+
+    '<label>Catatan (opsional)</label><textarea id="note" placeholder="Boleh dikosongkan"></textarea>'+errHtml()+
+    '<div style="margin-top:14px"><button class="primary" data-a="submit">Submit</button></div>'+
+    '<div style="text-align:center"><button class="danger" data-a="discard">Buang sesi</button></div></div>';
+}
+
+/* ====== Pemulihan sesi terputus ====== */
+function checkRecovery(){
+  var a=db.active;if(!a)return;
+  if(a.stoppedAt){ui.view='finish';return;}
+  var b=bookById(a.bookId);
+  if(!b){db.active=null;save();return;}
+  var gap=Math.max(0,Date.now()-(a.lastSeen||a.startedAt));
+  var mins=Math.round(elapsedMs({startedAt:a.startedAt,pausedMs:a.pausedMs,stoppedAt:a.lastSeen||a.startedAt},0)/60000);
+  ui.view='home';
+  showModal('<h2>Ada sesi yang belum selesai</h2><p class="muted">"'+esc(b.title)+'" — tercatat berjalan sekitar '+mins+' menit sebelum terputus. Waktu saat terputus tidak dihitung.</p>'+
+    '<button class="primary" data-a="resume">Lanjutkan</button><button data-a="endrec">Akhiri &amp; isi halaman</button>');
+}
+function resumeSession(){
+  var a=db.active,now=Date.now();
+  a.pausedMs=(a.pausedMs||0)+Math.max(0,now-(a.lastSeen||now));a.lastSeen=now;save();
+  closeModal();unlockAudio();getLock();ui.view='timer';render();
+}
+function endRecovered(){
+  var a=db.active;a.stoppedAt=a.lastSeen||Date.now();save();closeModal();ui.view='finish';render();
+}
+
+/* ====== Event ====== */
+document.addEventListener('click',function(e){
+  var el=e.target.closest('[data-a]');if(!el)return;
+  var a=el.getAttribute('data-a');
+  if(a==='nav'){ui.view=el.getAttribute('data-v');ui.err='';ui.notice='';render();}
+  else if(a==='help'){ui.help=!ui.help;render();}
+  else if(a==='goal'){ui.goal=parseInt(el.getAttribute('data-g'),10);keepInputs();render();}
+  else if(a==='start'){keepInputs();startSession();}
+  else if(a==='finish')stopSession();
+  else if(a==='continue')continueReading();
+  else if(a==='discard')discardSession();
+  else if(a==='submit')submitSession();
+  else if(a==='addbook')addBook();
+  else if(a==='delbook')deleteBook(el.getAttribute('data-id'));
+  else if(a==='closeModal')closeModal();
+  else if(a==='resume')resumeSession();
+  else if(a==='endrec')endRecovered();
+});
+document.addEventListener('change',function(e){
+  if(e.target.id==='sel'){ui.bookId=e.target.value;ui.startPage=lastEnd(ui.bookId,db.sessions);ui.err='';render();}
+  else if(e.target.id==='hb'){ui.histBook=e.target.value;render();}
+});
+function keepInputs(){var sp=document.getElementById('sp');if(sp)ui.startPage=sp.value;}
+document.addEventListener('visibilitychange',function(){
+  var a=db.active;
+  if(document.hidden){if(a&&!a.stoppedAt){a.lastSeen=Date.now();save();}}
+  else if(a&&!a.stoppedAt&&ui.view==='timer'){getLock();tick();}
+});
+window.addEventListener('pagehide',function(){var a=db.active;if(a&&!a.stoppedAt){a.lastSeen=Date.now();save();}});
+
+/* ====== Mulai ====== */
+if(typeof document!=='undefined'&&document.getElementById('app')){
+  $app=document.getElementById('app');$nav=document.getElementById('nav');$modal=document.getElementById('modal');
+  db=load();
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
+  checkRecovery();
+  render();
+}
+</script>
+</body>
+</html>
