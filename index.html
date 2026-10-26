@@ -3,56 +3,97 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#2f5d50">
+<meta name="theme-color" content="#FFFBEF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>Habit Baca</title>
 <style>
 :root{
-  --bg:#f6f3ec; --card:#ffffff; --ink:#1f2a27; --muted:#6a7571; --line:#e3ded2;
-  --accent:#2f5d50; --accent-ink:#ffffff; --soft:#e4efe9; --warn:#b4531f; --ok:#2f7d4f;
+  --bg:#FFFBEF; --card:#FFFFFF; --ink:#473C33; --muted:#7A6D62; --line:#EFE6D2;
+  --green:#ABC270; --green-soft:#E4EDC4; --yellow:#FEC868; --yellow-soft:#FFF1CF; --orange:#FDA769;
+  --accent:#FDA769; --soft:#F6EEDB; --warn:#A8501C; --ok:#4C6A12; --dot:#7E9A3A;
+  --on-color:#473C33; --cream:#FFFBEF; --input-bg:#FFFBEF;
+  --today-bg:#473C33; --today-ink:#FFFBEF; --quest-bg:#FFF1CF;
+  --navon-bg:#E4EDC4; --navon-ink:#473C33; --muted-q:#6F6358; --banner-ink:#FFFFFF;
+  --shadow:0 6px 20px rgba(71,60,51,.08); --shadow-nav:0 10px 30px rgba(71,60,51,.18);
+  --shadow-orange:0 8px 20px rgba(253,167,105,.5);
 }
 @media (prefers-color-scheme: dark){
-  :root{--bg:#121816; --card:#1b2421; --ink:#eaf0ed; --muted:#97a39e; --line:#2c3935;
-        --accent:#6fc1a3; --accent-ink:#0f1a16; --soft:#23332d; --warn:#e08a55; --ok:#79d09a;}
+  :root{--bg:#2B2420; --card:#362E28; --ink:#FFFBEF; --muted:#C2B6A8; --line:#4A3F37; --soft:#40372F;
+        --warn:#FDA769; --ok:#C8DE8A; --dot:#ABC270; --input-bg:#2B2420;
+        --today-bg:#FFFBEF; --today-ink:#2B2420; --quest-bg:#4A3E26;
+        --navon-bg:#47502B; --navon-ink:#E4EDC4; --muted-q:#C2B6A8; --banner-ink:#2B2420;
+        --shadow:0 6px 20px rgba(0,0,0,.35); --shadow-nav:0 10px 30px rgba(0,0,0,.5);}
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
-body{padding:16px 16px calc(84px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
-h1{font-size:1.35rem;margin:4px 0 14px}
-h2{font-size:1.05rem;margin:0 0 8px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Quicksand",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-weight:500;line-height:1.45}
+body{padding:16px 16px calc(108px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
+h1{font-size:1.4rem;font-weight:700;margin:4px 0 14px}
+h2{font-size:1.08rem;font-weight:700;margin:0 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;margin-bottom:12px;box-shadow:var(--shadow)}
 .muted{color:var(--muted);font-size:.9rem}
 .row{display:flex;gap:10px;align-items:center}
 .row.between{justify-content:space-between}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center}
-.stat b{display:block;font-size:1.5rem}
-.stat span{font-size:.78rem;color:var(--muted)}
-.bar{height:12px;background:var(--soft);border-radius:99px;overflow:hidden;margin:8px 0 4px}
-.bar>i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
-label{display:block;font-size:.88rem;color:var(--muted);margin:10px 0 4px}
-input,select,textarea{width:100%;font:inherit;font-size:16px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.ic{width:22px;height:22px;flex:0 0 auto}
+.bar{height:14px;background:var(--soft);border-radius:99px;overflow:hidden;margin:10px 0 6px;box-shadow:inset 0 0 0 1px var(--line)}
+.bar>i{display:block;height:100%;background:var(--orange);border-radius:99px;transition:width .4s}
+label{display:block;font-size:.88rem;font-weight:600;color:var(--muted);margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;font-weight:500;font-size:16px;padding:12px 14px;min-height:48px;border-radius:16px;border:1px solid var(--line);background:var(--input-bg);color:var(--ink)}
 textarea{min-height:90px;resize:vertical}
-button{font:inherit;font-size:16px;border:0;border-radius:12px;padding:14px 16px;cursor:pointer;background:var(--soft);color:var(--ink);min-height:48px}
-button.primary{background:var(--accent);color:var(--accent-ink);font-weight:600;width:100%}
-button.danger{background:transparent;color:var(--warn);min-height:40px;padding:8px 10px}
-button.small{min-height:40px;padding:8px 12px;font-size:.9rem}
+button{font:inherit;font-weight:600;font-size:16px;border:0;border-radius:16px;padding:14px 16px;cursor:pointer;background:var(--soft);color:var(--ink);min-height:48px}
+button.primary{background:var(--orange);color:var(--on-color);font-weight:700;width:100%}
+button.danger{background:transparent;color:var(--warn);min-height:44px;padding:8px 10px}
+button.small{min-height:44px;padding:8px 12px;font-size:.9rem}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{padding:10px 14px;min-height:44px;border:1px solid var(--line);background:var(--bg)}
-.chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.badge{display:inline-block;font-size:.75rem;padding:2px 8px;border-radius:99px;background:var(--soft)}
+.chip{padding:10px 14px;min-height:44px;border:1px solid var(--line);background:var(--input-bg);border-radius:999px}
+.chip.on{background:var(--green);color:var(--on-color);border-color:var(--green)}
+.badge{display:inline-block;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--soft)}
 .badge.ok{color:var(--ok)} .badge.no{color:var(--warn)}
-nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
-nav button{flex:1;border-radius:0;background:transparent;min-height:60px;color:var(--muted);font-size:.85rem}
-nav button.on{color:var(--accent);font-weight:700}
+nav{position:fixed;left:16px;right:16px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:528px;margin:0 auto;display:flex;gap:4px;padding:6px;background:var(--card);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow-nav);z-index:5}
+nav button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:999px;background:transparent;min-height:52px;padding:0 8px;color:var(--muted);font-size:.86rem;font-weight:600}
+nav button.on{background:var(--navon-bg);color:var(--navon-ink);font-weight:700}
 .help ol{margin:8px 0 0;padding-left:22px}.help li{margin:6px 0}
-.linkbtn{background:transparent;color:var(--accent);min-height:40px;padding:8px 4px;text-decoration:underline;font-size:.95rem}
-.notice{background:var(--soft);color:var(--ink);border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:.92rem}
-.err{color:var(--warn);font-size:.9rem;margin:8px 0 0}
-.banner{background:var(--warn);color:#fff;padding:10px 12px;border-radius:12px;margin-bottom:12px;font-size:.9rem}
+.linkbtn{background:transparent;color:var(--ink);min-height:44px;padding:8px 4px;text-decoration:underline;font-size:.95rem}
+.notice{background:var(--soft);color:var(--ink);border-radius:16px;padding:10px 14px;margin-bottom:10px;font-size:.92rem}
+.err{color:var(--warn);font-size:.9rem;font-weight:600;margin:8px 0 0}
+.banner{background:var(--warn);color:var(--banner-ink);padding:10px 14px;border-radius:16px;margin-bottom:12px;font-size:.9rem}
 .sess{padding:10px 0;border-top:1px solid var(--line)}
 .sess:first-child{border-top:0}
 .note{white-space:pre-wrap;margin-top:4px}
-.dayh{font-weight:600;margin:14px 0 6px}
+.dayh{font-weight:700;margin:14px 0 6px}
+/* beranda */
+.hdate{font-size:.85rem;font-weight:600;color:var(--muted);margin:6px 0 0}
+.greet{font-size:1.75rem;font-weight:700;letter-spacing:-.3px;margin:2px 0 14px}
+.strip{display:flex;gap:6px;margin-bottom:14px}
+.day{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 0 7px;border-radius:20px;color:var(--muted);font-weight:600}
+.day .dn{font-size:.72rem}
+.day b{font-size:1.08rem;font-weight:700;color:var(--ink)}
+.day .dot{width:6px;height:6px;border-radius:50%;margin-top:3px;background:transparent}
+.day .dot.on{background:var(--dot)}
+.day.today{background:var(--today-bg);color:var(--today-ink)}
+.day.today b{color:var(--today-ink)}
+.day.today .dot.on{background:var(--green)}
+.hero{background:var(--green);color:var(--on-color);border-radius:28px;padding:18px 16px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.hero-top{display:flex;align-items:center;gap:14px}
+.mascot{flex:0 0 100px;height:100px}
+.mascot svg{width:100%;height:100%;display:block;overflow:visible;animation:bob 3.2s ease-in-out infinite}
+.bubble{position:relative;flex:1;background:var(--cream);color:var(--on-color);border-radius:22px;padding:12px 14px;font-weight:700;font-size:1.02rem;line-height:1.3}
+.bubble::before{content:"";position:absolute;left:-8px;top:50%;margin-top:-8px;border:8px solid transparent;border-left:0;border-right-color:var(--cream)}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.62);color:var(--on-color);border-radius:999px;padding:7px 13px;font-weight:700;font-size:.92rem}
+.pill .ic{width:18px;height:18px}
+.gift{font-size:.82rem;font-weight:600;color:var(--muted);margin:0}
+.countdown{font-size:1.5rem;font-weight:700;letter-spacing:-.3px}
+.quest{display:flex;align-items:center;gap:12px;background:var(--quest-bg);border:1px solid var(--line);border-radius:24px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.qicon{flex:0 0 46px;height:46px;border-radius:50%;background:var(--yellow);color:#473C33;display:flex;align-items:center;justify-content:center}
+.qbody{flex:1;min-width:0}
+.qt{font-weight:700}
+.quest .muted{color:var(--muted-q)}
+.qchip{flex:0 0 auto;padding:6px 12px;border-radius:999px;font-size:.82rem;font-weight:700;background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.qchip.on{background:var(--green);color:#473C33;border-color:var(--green)}
+.cta{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;border-radius:999px;font-size:1.1rem;box-shadow:var(--shadow-orange);margin-top:2px}
+.cta .ic{width:22px;height:22px}
 /* timer */
 .timerwrap{min-height:calc(100vh - 32px);display:flex;flex-direction:column;justify-content:center;text-align:center;gap:14px}
 .ring{width:min(78vw,300px);height:min(78vw,300px);margin:0 auto;position:relative}
@@ -62,11 +103,15 @@ nav button.on{color:var(--accent);font-weight:700}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
 .modal .card{max-width:420px;width:100%;margin:0}
 .modal button{width:100%;margin-top:8px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
 </style>
 </head>
 <body>
 <div id="app"></div>
-<nav id="nav"></nav>
+<nav id="nav" aria-label="Menu utama"></nav>
 <div id="modal"></div>
 
 <script>
@@ -269,8 +314,8 @@ function closeModal(){$modal.innerHTML='';}
 /* ====== Render ====== */
 function render(){
   $nav.style.display=(ui.view==='timer'||ui.view==='finish')?'none':'flex';
-  $nav.innerHTML=[['home','Beranda'],['books','Buku'],['history','Riwayat']].map(function(x){
-    return '<button data-a="nav" data-v="'+x[0]+'" class="'+(ui.view===x[0]?'on':'')+'">'+x[1]+'</button>';
+  $nav.innerHTML=[['home','Beranda','home'],['books','Buku','book'],['history','Riwayat','history']].map(function(x){
+    return '<button data-a="nav" data-v="'+x[0]+'" class="'+(ui.view===x[0]?'on':'')+'"'+(ui.view===x[0]?' aria-current="page"':'')+'>'+icon(x[2])+'<span>'+x[1]+'</span></button>';
   }).join('');
   var banner=storageOK?'':'<div class="banner">Penyimpanan browser tidak tersedia (mode privat?). Data tidak akan tersimpan.</div>';
   var html='';
@@ -287,7 +332,7 @@ function helpCard(){
   return '<div class="card help"><h2>Cara pakai</h2>'+
     '<div>Aplikasi ini membantu membangun kebiasaan membaca buku fisik lewat sesi timer pendek yang naik bertahap. Target: 30 hari aktif sebelum 18 Des 2026.</div>'+
     '<ol><li><b>Tambah buku</b> (judul dan total halaman, cukup sekali per buku).</li>'+
-    '<li><b>Pilih buku dan goal menit</b>, lalu tekan Mulai timer.</li>'+
+    '<li><b>Pilih buku dan goal menit</b>, lalu tekan Mulai membaca.</li>'+
     '<li><b>Setelah selesai</b>, isi end page lalu tekan Submit. Sesi tercatat di Riwayat.</li></ol></div>';
 }
 function helpHtml(){
@@ -296,25 +341,72 @@ function helpHtml(){
 }
 function errHtml(){return ui.err?'<p class="err">'+esc(ui.err)+'</p>':'';}
 
+/* ====== Ikon, maskot, date strip (tampilan saja) ====== */
+var USER_NAME='Witri';
+var ICONS={
+  home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+  book:'<path d="M12 6c-2-1.5-5-2-8-2v14c3 0 6 .5 8 2 2-1.5 5-2 8-2V4c-3 0-6 .5-8 2z"/><path d="M12 6v14"/>',
+  history:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3 2"/>',
+  flame:'<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5.3 1.2 1 2 2 2.5C11 8 11 5 12 3z"/>',
+  play:'<path d="M7 4.5v15l13-7.5z" fill="currentColor"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>'
+};
+function icon(n){return '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[n]+'</svg>';}
+// Maskot "Si Buku": ekspresi berubah sesuai level quest (1-4).
+function mascotSvg(level){
+  var B='#473C33',S='stroke="'+B+'" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"';
+  var face='',extra='';
+  var cheeks='<circle cx="41" cy="73" r="5.5" fill="#F6A5B5"/><circle cx="79" cy="73" r="5.5" fill="#F6A5B5"/>';
+  if(level<=1){
+    face='<path d="M42 62q5 4 10 0M68 62q5 4 10 0" fill="none" '+S+'/><ellipse cx="60" cy="78" rx="3.5" ry="4.2" fill="'+B+'"/>';
+    extra='<path d="M6 16h8l-8 8h8M16 6h6l-6 6h6" fill="none" stroke="'+B+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  }else if(level===2){
+    face='<circle cx="48" cy="62" r="4.5" fill="'+B+'"/><circle cx="72" cy="62" r="4.5" fill="'+B+'"/><circle cx="49.5" cy="60.5" r="1.4" fill="#fff"/><circle cx="73.5" cy="60.5" r="1.4" fill="#fff"/><path d="M50 75q10 9 20 0" fill="none" '+S+'/>';
+  }else if(level===3){
+    face='<path d="M42 64q6-8 12 0M66 64q6-8 12 0" fill="none" '+S+'/><path d="M49 73q11 14 22 0z" fill="'+B+'" '+S+'/>';
+    extra='<polygon points="12,8 14.6,14.2 21,14.8 16.2,19 17.6,25.4 12,22 6.4,25.4 7.8,19 3,14.8 9.4,14.2" fill="#FEC868" stroke="'+B+'" stroke-width="2.2" stroke-linejoin="round"/>';
+  }else{
+    face='<circle cx="47" cy="62" r="6" fill="'+B+'"/><circle cx="73" cy="62" r="6" fill="'+B+'"/><circle cx="49" cy="60" r="2" fill="#fff"/><circle cx="75" cy="60" r="2" fill="#fff"/><circle cx="45.5" cy="64" r="1" fill="#fff"/><circle cx="71.5" cy="64" r="1" fill="#fff"/><path d="M47 72q13 17 26 0z" fill="'+B+'" '+S+'/><path d="M54 79q6 5 12 0" fill="#F6A5B5" stroke="none"/>';
+    extra='<polygon points="28,20 28,6 38,13 43,3 48,13 58,6 58,20" fill="#FEC868" '+S+'/>';
+  }
+  return '<svg viewBox="0 0 120 120" aria-hidden="true">'+
+    '<rect x="28" y="90" width="64" height="18" rx="6" fill="#FFF1CF" '+S+'/>'+
+    '<rect x="22" y="18" width="76" height="82" rx="16" fill="#FDA769" '+S+'/>'+
+    '<path d="M33 26v66" fill="none" stroke="'+B+'" stroke-width="2.5" stroke-linecap="round" opacity=".35"/>'+
+    cheeks+face+
+    '<path d="M74 14h16v32l-8-7-8 7z" fill="#FEC868" '+S+'/>'+
+    extra+'</svg>';
+}
+function stripHtml(dates,today){
+  var p=today.split('-'),out='';
+  for(var o=-3;o<=3;o++){
+    var d=new Date(+p[0],+p[1]-1,+p[2]+o),k=dkey(d.getTime()),on=dates.indexOf(k)>=0;
+    out+='<div class="day'+(o===0?' today':'')+'" role="listitem"'+(o===0?' aria-current="date"':'')+' aria-label="'+prettyDate(k)+(on?', sudah membaca':'')+'">'+
+      '<span class="dn">'+DAY[d.getDay()]+'</span><b>'+d.getDate()+'</b><i class="dot'+(on?' on':'')+'"></i></div>';
+  }
+  return '<div class="strip" role="list" aria-label="Tujuh hari sekitar hari ini">'+out+'</div>';
+}
+
 function viewHome(){
   var today=dkey(Date.now()),info=todayInfo(db.sessions,today);
   var days=dnum(BIRTHDAY)-dnum(today);
   var cd=days>0?days+' hari lagi':days===0?'Hari ini ulang tahunmu! 🎂':'Ulang tahun sudah lewat';
   var act=info.dates.length,pct=Math.min(100,Math.round(act/TARGET_DAYS*100));
   var bonus=act>TARGET_DAYS?' · bonus +'+(act-TARGET_DAYS):'';
-  var goalTxt=act>=TARGET_DAYS?'Target tercapai — series buku baru layak kamu ambil 🎁':'Menuju hadiah: series buku baru';
-  var qs=info.met?'<span class="badge ok">tercapai ✓</span>':info.isActive?'<span class="badge no">sudah aktif, belum tercapai</span>':'<span class="badge">belum mulai</span>';
-  var h='<h1>Habit Baca</h1>'+helpHtml();
-  h+='<div class="card"><div class="row between"><h2>'+cd+'</h2><span class="muted">18 Des 2026</span></div>'+
-     '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+  var msg=!db.books.length?'Tambah buku pertamamu, yuk!':info.isActive?'Mantap, hari ini beres!':'Ayo, '+info.goalMin+' menit saja hari ini!';
+  var h='<header><div class="hdate">'+prettyDate(today)+'</div><h1 class="greet">Hai, '+esc(USER_NAME)+'!</h1></header>'+helpHtml()+stripHtml(info.dates,today);
+  h+='<section class="hero"><div class="hero-top"><div class="mascot">'+mascotSvg(info.lv)+'</div><div class="bubble" role="status">'+esc(msg)+'</div></div>'+
+     '<div class="hero-chips"><span class="pill">'+icon('flame')+streak(info.dates,today)+' hari</span>'+
+     '<span class="pill">'+icon('book')+finishedCount()+'/'+TARGET_BOOKS+' buku selesai</span></div></section>';
+  h+='<section class="card"><p class="gift">Hadiah ulang tahun</p><h2>Series buku baru</h2>'+
+     '<div class="row between"><span class="countdown">'+cd+'</span><span class="muted">18 Des 2026</span></div>'+
+     '<div class="bar" role="progressbar" aria-label="Hari aktif menuju target" aria-valuemin="0" aria-valuemax="'+TARGET_DAYS+'" aria-valuenow="'+Math.min(act,TARGET_DAYS)+'"><i style="width:'+pct+'%"></i></div>'+
      '<div class="row between muted"><span>'+act+' / '+TARGET_DAYS+' hari aktif'+bonus+'</span><span>'+pct+'%</span></div>'+
-     '<div class="muted" style="margin-top:6px">'+goalTxt+'</div></div>';
-  h+='<div class="grid3"><div class="stat"><b>'+streak(info.dates,today)+'</b><span>streak hari</span></div>'+
-     '<div class="stat"><b>'+finishedCount()+'/'+TARGET_BOOKS+'</b><span>buku selesai</span></div>'+
-     '<div class="stat"><b>'+(info.isActive?'✓':'–')+'</b><span>hari ini</span></div></div>';
-  h+='<div class="card"><div class="row between"><h2>Quest hari ini'+(info.bonus?' · bonus':'')+'</h2>'+qs+'</div>'+
+     (act>=TARGET_DAYS?'<div class="muted" style="margin-top:6px">Target tercapai — series buku baru layak kamu ambil</div>':'')+'</section>';
+  h+='<section class="quest"><div class="qicon">'+icon('clock')+'</div><div class="qbody"><div class="qt">Quest hari ini'+(info.bonus?' · bonus':'')+'</div>'+
      '<div>Level '+info.lv+': baca <b>'+info.goalMin+' menit</b></div>'+
-     '<div class="muted">Hari aktif ke-'+info.idx+'. Sesi lebih pendek tetap dihitung hari aktif.</div></div>';
+     '<div class="muted">Hari aktif ke-'+info.idx+'. Sesi lebih pendek tetap dihitung.</div></div>'+
+     '<span class="qchip'+(info.met?' on':'')+'">'+(info.met?'Tercapai':'Belum')+'</span></section>';
   var ob=openBooks();
   if(!db.books.length){
     h+='<div class="card"><h2>Langkah 1: tambah buku</h2>'+bookForm()+'</div>';
@@ -325,12 +417,12 @@ function viewHome(){
     if(ui.startPage==null)ui.startPage=lastEnd(ui.bookId,db.sessions);
     if(ui.goal===null)ui.goal=info.goalMin;
     var b=bookById(ui.bookId);
-    h+='<div class="card">'+noticeHtml()+'<h2>Mulai membaca</h2><label>Buku</label><select id="sel">'+
+    h+='<div class="card">'+noticeHtml()+'<h2>Pilih buku &amp; goal</h2><label>Buku</label><select id="sel">'+
       ob.map(function(x){return '<option value="'+x.id+'"'+(x.id===ui.bookId?' selected':'')+'>'+esc(x.title)+'</option>';}).join('')+'</select>'+
       '<label>Start page (dari '+b.total+' halaman)</label><input id="sp" type="number" inputmode="numeric" min="1" max="'+b.total+'" value="'+esc(ui.startPage)+'">'+
       '<label>Mau baca berapa menit?</label><div class="chips">'+GOALS.map(function(g){return '<button class="chip'+(ui.goal===g?' on':'')+'" data-a="goal" data-g="'+g+'">'+g+' mnt</button>';}).join('')+
       '<button class="chip'+(ui.goal===0?' on':'')+'" data-a="goal" data-g="0">Bebas</button></div>'+
-      errHtml()+'<div style="margin-top:14px"><button class="primary" data-a="start">Mulai timer</button></div></div>';
+      errHtml()+'</div><button class="primary cta" data-a="start">'+icon('play')+'Mulai membaca</button>';
   }
   return h;
 }
