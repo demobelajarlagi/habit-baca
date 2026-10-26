@@ -16,16 +16,16 @@
   --on-color:#473C33; --cream:#FFFBEF; --input-bg:#FFFBEF;
   --today-bg:#473C33; --today-ink:#FFFBEF; --quest-bg:#FFF1CF;
   --navon-bg:#E4EDC4; --navon-ink:#473C33; --muted-q:#6F6358; --banner-ink:#FFFFFF;
+  color-scheme:light;
   --shadow:0 6px 20px rgba(71,60,51,.08); --shadow-nav:0 10px 30px rgba(71,60,51,.18);
   --shadow-orange:0 8px 20px rgba(253,167,105,.5);
 }
-@media (prefers-color-scheme: dark){
-  :root{--bg:#2B2420; --card:#362E28; --ink:#FFFBEF; --muted:#C2B6A8; --line:#4A3F37; --soft:#40372F;
-        --warn:#FDA769; --ok:#C8DE8A; --dot:#ABC270; --input-bg:#2B2420;
-        --today-bg:#FFFBEF; --today-ink:#2B2420; --quest-bg:#4A3E26;
-        --navon-bg:#47502B; --navon-ink:#E4EDC4; --muted-q:#C2B6A8; --banner-ink:#2B2420;
-        --shadow:0 6px 20px rgba(0,0,0,.35); --shadow-nav:0 10px 30px rgba(0,0,0,.5);}
+:root[data-view="timer"]{
+  --bg:#2B2420; --card:#362E28; --ink:#FFFBEF; --muted:#C2B6A8; --line:#4A3F37; --soft:#40372F; --input-bg:#2B2420;
+  --warn:#FDA769; --banner-ink:#2B2420; color-scheme:dark;
 }
+:root[data-view="timer"] body{padding-bottom:16px}
+:root[data-view="finish"] body{padding-bottom:28px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Quicksand",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-weight:500;line-height:1.45}
 body{padding:16px 16px calc(108px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
@@ -54,7 +54,8 @@ nav{position:fixed;left:16px;right:16px;bottom:calc(12px + env(safe-area-inset-b
 nav button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:999px;background:transparent;min-height:52px;padding:0 8px;color:var(--muted);font-size:.86rem;font-weight:600}
 nav button.on{background:var(--navon-bg);color:var(--navon-ink);font-weight:700}
 .help ol{margin:8px 0 0;padding-left:22px}.help li{margin:6px 0}
-.linkbtn{background:transparent;color:var(--ink);min-height:44px;padding:8px 4px;text-decoration:underline;font-size:.95rem}
+.helpchip{display:inline-flex;align-items:center;gap:8px;background:var(--yellow-soft);color:var(--on-color);border:1px solid var(--line);border-radius:999px;min-height:44px;padding:8px 16px 8px 12px;font-size:.92rem;font-weight:700}
+.helpchip .ic{width:20px;height:20px}
 .notice{background:var(--soft);color:var(--ink);border-radius:16px;padding:10px 14px;margin-bottom:10px;font-size:.92rem}
 .err{color:var(--warn);font-size:.9rem;font-weight:600;margin:8px 0 0}
 .banner{background:var(--warn);color:var(--banner-ink);padding:10px 14px;border-radius:16px;margin-bottom:12px;font-size:.9rem}
@@ -95,15 +96,46 @@ nav button.on{background:var(--navon-bg);color:var(--navon-ink);font-weight:700}
 .cta{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;border-radius:999px;font-size:1.1rem;box-shadow:var(--shadow-orange);margin-top:2px}
 .cta .ic{width:22px;height:22px}
 /* timer */
-.timerwrap{min-height:calc(100vh - 32px);display:flex;flex-direction:column;justify-content:center;text-align:center;gap:14px}
-.ring{width:min(78vw,300px);height:min(78vw,300px);margin:0 auto;position:relative}
+.timerwrap{min-height:calc(100vh - 32px);min-height:calc(100dvh - 32px);display:flex;flex-direction:column;justify-content:center;align-items:stretch;text-align:center;gap:14px}
+.t-head h2{margin:0;font-size:1.15rem}
+.ring{--rs:min(76vw,290px);width:var(--rs);height:var(--rs);margin:0 auto;position:relative}
 .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
 .ring .t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.tdig{font-size:calc(var(--rs) * .345);font-weight:500;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-1px;white-space:nowrap}
+.tdig.long{font-size:calc(var(--rs) * .22)}
+.ring .t .muted{margin-top:6px}
+.t-buddy{display:flex;align-items:center;justify-content:center;gap:12px}
+.t-buddy .mascot{flex:0 0 84px;height:84px}
+.mascot.breath svg{animation:breathe 4.2s ease-in-out infinite;transform-origin:50% 92%}
+.bubble.sm{flex:0 1 auto;max-width:210px;font-size:.92rem;padding:10px 14px;text-align:left}
+button.outline{background:transparent;color:var(--ink);border:2px solid var(--ink);border-radius:999px;min-height:48px;padding:10px 16px;font-weight:700}
+@media (max-height:700px){.ring{--rs:min(60vw,230px)}.t-buddy .mascot{flex-basis:64px;height:64px}.timerwrap{gap:10px}}
 .big{font-size:clamp(3rem,16vw,4.6rem);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+/* selesai membaca */
+.fin-head{display:flex;align-items:center;gap:12px;margin:2px 0 12px}
+.fin-head h1{margin:0}
+.fin-head .mascot{flex:0 0 76px;height:76px}
+.textbtn{display:block;width:100%;background:transparent;color:var(--ink);min-height:44px;font-weight:700;margin-top:6px}
+/* modal + perayaan */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
 .modal .card{max-width:420px;width:100%;margin:0}
 .modal button{width:100%;margin-top:8px}
+.modal.celebrate-modal{background:#FEC868;padding:0;align-items:stretch;overflow-y:auto}
+.celebrate-modal .card{max-width:none;background:transparent;border:0;box-shadow:none;border-radius:0;padding:28px 22px calc(28px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;color:#473C33}
+.cel-confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.cel-body{position:relative;width:100%;max-width:380px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.cel-bubble{position:relative;background:#FFFBEF;color:#473C33;border-radius:22px;padding:10px 20px;font-weight:700;font-size:1.1rem}
+.cel-bubble::after{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-9px;border:9px solid transparent;border-bottom:0;border-top-color:#FFFBEF}
+.cel-mascot{width:min(46vw,190px);height:min(46vw,190px);margin:12px 0 4px}
+.cel-mascot svg{width:100%;height:100%;display:block;overflow:visible;animation:hop 1.6s ease-in-out infinite;transform-origin:50% 100%}
+.cel-title{font-size:1.7rem;font-weight:700;margin:0;letter-spacing:-.3px;color:#473C33}
+.cel-sub{margin:0 0 10px;font-weight:600;font-size:1rem;color:#473C33}
+.celebrate-modal button{margin-top:0;width:100%;min-height:56px;border-radius:999px;font-weight:700;font-size:1.05rem}
+.celebrate-modal .cel-main{background:#473C33;color:#FFFBEF}
+.celebrate-modal .cel-alt{background:#FEC868;color:#473C33;border:2px solid #473C33;min-height:48px;margin-top:2px}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes hop{0%,100%{transform:translateY(0) scaleY(1)}12%{transform:translateY(0) scaleY(.94)}45%{transform:translateY(-24px) scaleY(1.03)}75%{transform:translateY(0) scaleY(1)}}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
@@ -292,14 +324,14 @@ function tick(){
   var over=goalMs&&el>=goalMs;
   if(goalMs&&!over){t.textContent=fmt(Math.ceil((goalMs-el)/1000)*1000);sub.textContent='sisa waktu';}
   else{t.textContent=fmt(el);sub.textContent=goalMs?'goal tercapai · lanjut membaca':'waktu membaca';}
+  t.classList.toggle('long',t.textContent.length>5);
   if(arc){
     var C=2*Math.PI*54,p=goalMs?Math.min(1,el/goalMs):0;
     arc.setAttribute('stroke-dashoffset',String(C*(1-p)));
   }
   if(over&&!a.goalHandled&&!reachedShown){
     reachedShown=true;beep();
-    showModal('<h2>Waktu tercapai ✓</h2><p class="muted">Goal '+a.goalMin+' menit selesai. Mau berhenti atau lanjut membaca?</p>'+
-      '<button class="primary" data-a="finish">Selesai</button><button data-a="continue">Lanjut baca</button>');
+    showModal(celebrateHtml(a),'celebrate-modal');
   }
 }
 function continueReading(){
@@ -308,12 +340,14 @@ function continueReading(){
 }
 
 /* ====== Modal ====== */
-function showModal(html){$modal.innerHTML='<div class="modal"><div class="card">'+html+'</div></div>';}
+function showModal(html,cls){$modal.innerHTML='<div class="modal'+(cls?' '+cls:'')+'"><div class="card">'+html+'</div></div>';}
 function closeModal(){$modal.innerHTML='';}
 
 /* ====== Render ====== */
 function render(){
   $nav.style.display=(ui.view==='timer'||ui.view==='finish')?'none':'flex';
+  document.documentElement.setAttribute('data-view',ui.view);
+  var tc=document.querySelector('meta[name=theme-color]');if(tc)tc.setAttribute('content',ui.view==='timer'?'#2B2420':'#FFFBEF');
   $nav.innerHTML=[['home','Beranda','home'],['books','Buku','book'],['history','Riwayat','history']].map(function(x){
     return '<button data-a="nav" data-v="'+x[0]+'" class="'+(ui.view===x[0]?'on':'')+'"'+(ui.view===x[0]?' aria-current="page"':'')+'>'+icon(x[2])+'<span>'+x[1]+'</span></button>';
   }).join('');
@@ -337,7 +371,7 @@ function helpCard(){
 }
 function helpHtml(){
   if(!db.books.length&&!db.sessions.length)return helpCard();
-  return '<div style="margin-bottom:8px"><button class="linkbtn" data-a="help" aria-expanded="'+(ui.help?'true':'false')+'">'+(ui.help?'Tutup cara pakai':'Cara pakai')+'</button></div>'+(ui.help?helpCard():'');
+  return '<div style="margin-bottom:10px"><button class="helpchip" data-a="help" aria-expanded="'+(ui.help?'true':'false')+'">'+icon('help')+'<span>'+(ui.help?'Tutup cara pakai':'Cara pakai')+'</span></button></div>'+(ui.help?helpCard():'');
 }
 function errHtml(){return ui.err?'<p class="err">'+esc(ui.err)+'</p>':'';}
 
@@ -349,7 +383,8 @@ var ICONS={
   history:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3 2"/>',
   flame:'<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5.3 1.2 1 2 2 2.5C11 8 11 5 12 3z"/>',
   play:'<path d="M7 4.5v15l13-7.5z" fill="currentColor"/>',
-  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>'
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1.1.9-1.1 1.7"/><path d="M12 17.2v.01"/>'
 };
 function icon(n){return '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[n]+'</svg>';}
 // Maskot "Si Buku": ekspresi berubah sesuai level quest (1-4).
@@ -357,7 +392,9 @@ function mascotSvg(level){
   var B='#473C33',S='stroke="'+B+'" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"';
   var face='',extra='';
   var cheeks='<circle cx="41" cy="73" r="5.5" fill="#F6A5B5"/><circle cx="79" cy="73" r="5.5" fill="#F6A5B5"/>';
-  if(level<=1){
+  if(level==='calm'){
+    face='<path d="M42 63q5 4 10 0M68 63q5 4 10 0" fill="none" '+S+'/><path d="M52 75q8 6 16 0" fill="none" '+S+'/>';
+  }else if(level<=1){
     face='<path d="M42 62q5 4 10 0M68 62q5 4 10 0" fill="none" '+S+'/><ellipse cx="60" cy="78" rx="3.5" ry="4.2" fill="'+B+'"/>';
     extra='<path d="M6 16h8l-8 8h8M16 6h6l-6 6h6" fill="none" stroke="'+B+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
   }else if(level===2){
@@ -376,6 +413,15 @@ function mascotSvg(level){
     cheeks+face+
     '<path d="M74 14h16v32l-8-7-8 7z" fill="#FEC868" '+S+'/>'+
     extra+'</svg>';
+}
+var CONFETTI='<svg class="cel-confetti" viewBox="0 0 360 660" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect x="30" y="40" width="10" height="6" rx="2" fill="#ABC270" transform="rotate(82 30 40)"/><circle cx="90" cy="90" r="5" fill="#FDA769"/><polygon points="150.0,21.0 152.4,26.7 158.6,27.2 153.9,31.3 155.3,37.3 150.0,34.0 144.7,37.3 146.1,31.3 141.4,27.2 147.6,26.7" fill="#FFFBEF"/><rect x="220" y="60" width="10" height="9" rx="2" fill="#473C33" transform="rotate(38 220 60)"/><circle cx="290" cy="35" r="5" fill="#ABC270"/><polygon points="335.0,86.0 337.4,91.7 343.6,92.2 338.9,96.3 340.3,102.3 335.0,99.0 329.7,102.3 331.1,96.3 326.4,92.2 332.6,91.7" fill="#FDA769"/><rect x="20" y="150" width="10" height="6" rx="2" fill="#FFFBEF" transform="rotate(101 20 150)"/><circle cx="60" cy="230" r="5" fill="#473C33"/><polygon points="330.0,161.0 332.4,166.7 338.6,167.2 333.9,171.3 335.3,177.3 330.0,174.1 324.7,177.3 326.1,171.3 321.4,167.2 327.6,166.7" fill="#ABC270"/><rect x="345" y="260" width="10" height="9" rx="2" fill="#FDA769" transform="rotate(166 345 260)"/><circle cx="25" cy="330" r="5" fill="#FFFBEF"/><polygon points="310.0,341.0 312.4,346.7 318.6,347.2 313.9,351.3 315.3,357.3 310.0,354.1 304.7,357.3 306.1,351.3 301.4,347.2 307.6,346.7" fill="#473C33"/><rect x="40" y="430" width="10" height="6" rx="2" fill="#ABC270" transform="rotate(12 40 430)"/><circle cx="330" cy="440" r="5" fill="#FDA769"/><polygon points="70.0,511.0 72.4,516.7 78.6,517.2 73.9,521.3 75.3,527.3 70.0,524.0 64.7,527.3 66.1,521.3 61.4,517.2 67.6,516.7" fill="#FFFBEF"/><rect x="290" y="540" width="10" height="9" rx="2" fill="#473C33" transform="rotate(18 290 540)"/><circle cx="25" cy="610" r="5" fill="#ABC270"/><polygon points="120.0,631.0 122.4,636.7 128.6,637.2 123.9,641.3 125.3,647.3 120.0,644.0 114.7,647.3 116.1,641.3 111.4,637.2 117.6,636.7" fill="#FDA769"/><rect x="240" y="625" width="10" height="6" rx="2" fill="#FFFBEF" transform="rotate(137 240 625)"/><circle cx="335" cy="600" r="5" fill="#473C33"/><polygon points="180.0,11.0 182.4,16.7 188.6,17.2 183.9,21.3 185.3,27.3 180.0,24.1 174.7,27.3 176.1,21.3 171.4,17.2 177.6,16.7" fill="#ABC270"/><rect x="255" y="120" width="10" height="9" rx="2" fill="#FDA769" transform="rotate(24 255 120)"/><circle cx="130" cy="150" r="5" fill="#FFFBEF"/><polygon points="10.0,61.0 12.4,66.7 18.6,67.2 13.9,71.3 15.3,77.3 10.0,74.0 4.7,77.3 6.1,71.3 1.4,67.2 7.6,66.7" fill="#473C33"/></svg>';
+function celebrateHtml(a){
+  var info=todayInfo(db.sessions,dkey(Date.now()));
+  var title=a.goalMin>=info.goalMin?'Quest Level '+info.lv+' selesai':'Goal '+a.goalMin+' menit selesai';
+  return CONFETTI+'<div class="cel-body" role="dialog" aria-modal="true" aria-labelledby="celt">'+
+    '<div class="cel-bubble">Waktu tercapai!</div><div class="cel-mascot">'+mascotSvg(3)+'</div>'+
+    '<h2 class="cel-title" id="celt">'+esc(title)+'</h2><p class="cel-sub">Kamu sudah membaca '+a.goalMin+' menit. Mantap!</p>'+
+    '<button class="cel-main" data-a="finish">Selesai</button><button class="cel-alt" data-a="continue">Lanjut baca</button></div>';
 }
 function stripHtml(dates,today){
   var p=today.split('-'),out='';
@@ -462,21 +508,23 @@ function viewHistory(){
 }
 function viewTimer(){
   var a=db.active,b=bookById(a.bookId),C=2*Math.PI*54;
-  return '<div class="timerwrap"><div><div class="muted">Membaca</div><h2 style="margin:0">'+esc(b.title)+'</h2><div class="muted">mulai dari hal. '+a.startPage+'</div></div>'+
-    '<div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="var(--soft)" stroke-width="8"/>'+
-    '<circle id="arc" cx="60" cy="60" r="54" fill="none" stroke="var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'"/></svg>'+
-    '<div class="t"><div class="big" id="tm">00:00</div><div class="muted" id="sub"></div></div></div>'+
+  return '<div class="timerwrap"><div class="t-head"><div class="muted">Membaca</div><h2>'+esc(b.title)+'</h2><div class="muted">mulai dari hal. '+a.startPage+'</div></div>'+
+    '<div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="#4A3F37" stroke-width="4.5"/>'+
+    '<circle id="arc" cx="60" cy="60" r="54" fill="none" stroke="#ABC270" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'"/></svg>'+
+    '<div class="t"><div class="tdig" id="tm">00:00</div><div class="muted" id="sub"></div></div></div>'+
     '<div class="muted">'+(a.goalMin?'Goal '+a.goalMin+' menit':'Mode bebas')+' · layar tetap menyala</div>'+
-    '<button class="primary" data-a="finish">Selesai</button><button class="danger" data-a="discard">Buang sesi</button></div>';
+    '<div class="t-buddy"><div class="mascot breath">'+mascotSvg('calm')+'</div><div class="bubble sm">Pelan-pelan saja, kamu hebat!</div></div>'+
+    '<button class="primary cta" data-a="finish">Selesai</button><button class="outline" data-a="discard">Buang sesi</button></div>';
 }
 function viewFinish(){
   var a=db.active,b=bookById(a.bookId);
-  return '<h1>Selesai membaca</h1><div class="card"><div class="muted">'+esc(b.title)+'</div><div class="big" style="font-size:2.4rem">'+fmt(elapsedMs(a,a.stoppedAt))+'</div></div>'+
+  return '<div class="fin-head"><div class="mascot">'+mascotSvg(3)+'</div><div><h1>Selesai membaca</h1><div class="muted">Kerja bagus! Tinggal catat halamannya.</div></div></div>'+
+    '<div class="card"><div class="muted">'+esc(b.title)+'</div><div class="big" style="font-size:2.4rem">'+fmt(elapsedMs(a,a.stoppedAt))+'</div></div>'+
     '<div class="card"><label>End page (dari '+b.total+' halaman, mulai '+a.startPage+')</label>'+
     '<input id="endp" type="number" inputmode="numeric" min="'+a.startPage+'" max="'+b.total+'" value="'+(ui.endPage||a.startPage)+'">'+
     '<label>Catatan (opsional)</label><textarea id="note" placeholder="Boleh dikosongkan"></textarea>'+errHtml()+
-    '<div style="margin-top:14px"><button class="primary" data-a="submit">Submit</button></div>'+
-    '<div style="text-align:center"><button class="danger" data-a="discard">Buang sesi</button></div></div>';
+    '<div style="margin-top:14px"><button class="primary cta" data-a="submit">Submit</button></div>'+
+    '<button class="textbtn" data-a="discard">Buang sesi</button></div>';
 }
 
 /* ====== Pemulihan sesi terputus ====== */
