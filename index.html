@@ -63,6 +63,55 @@ nav button.on{background:var(--navon-bg);color:var(--navon-ink);font-weight:700}
 .sess:first-child{border-top:0}
 .note{white-space:pre-wrap;margin-top:4px}
 .dayh{font-weight:700;margin:14px 0 6px}
+button:focus-visible,summary:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+/* riwayat */
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.st{border-radius:20px;padding:12px 8px;text-align:center;color:#473C33}
+.st b{display:block;font-size:22px;font-weight:700;line-height:1.2}
+.st span{display:block;font-size:.76rem;font-weight:600;color:#5E5248}
+.st.g{background:#E4EDC4}.st.y{background:#FFF1CF}.st.o{background:#FFE3CF}
+.card .sub{font-size:.82rem;font-weight:600;color:var(--muted);margin:-4px 0 0}
+.mapgrid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:14px 0}
+.mc{aspect-ratio:1/1;border-radius:8px}
+.mc.missed{background:#EDE4CF}
+.mc.future{border:2px dashed #D2C5AB}
+.mc.today,.mc.todayon{box-shadow:inset 0 0 0 2.5px #473C33}
+.mc.today{background:#FFFBEF}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.76rem;font-weight:600;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:4px;display:inline-block;flex:0 0 auto}
+.sw.missed{background:#EDE4CF}.sw.fut{border:1.5px dashed #D2C5AB}.sw.now{background:#FFFBEF;box-shadow:inset 0 0 0 2.5px #473C33}
+.plot{position:relative;height:124px;margin-top:12px}
+.bars{display:flex;gap:8px;height:100%;align-items:flex-end}
+.bcol{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}
+.bval{font-size:.8rem;font-weight:700;line-height:1}
+.bfill{display:block;width:100%;max-width:36px;border-radius:10px 10px 6px 6px;background:var(--green)}
+.bcol.today .bfill{background:var(--orange)}
+.bzero{display:block;width:8px;height:8px;border-radius:50%;background:#E9DFC6}
+.tline{position:absolute;left:0;right:0;border-top:2px dashed #8A7C6F;pointer-events:none}
+.blabels{display:flex;gap:8px;margin-top:6px}
+.blabels span{flex:1;min-width:0;text-align:center;font-size:.78rem;font-weight:600;color:var(--muted)}
+.blabels .now{color:var(--ink);font-weight:700}
+.tleg{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:.78rem;font-weight:600;color:var(--muted)}
+.tdash{width:22px;border-top:2px dashed #8A7C6F;display:inline-block}
+.sech{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 2px 10px}
+.sech h2{margin:0}
+.sech select{width:auto;max-width:60%;min-height:44px;padding:8px 12px}
+.scard{padding:14px 16px;margin-bottom:10px}
+.smeta{display:flex;flex-wrap:wrap;gap:2px 12px;color:var(--muted);font-size:.88rem;font-weight:600;margin-top:4px}
+.empty{text-align:center;padding:22px 16px}
+.empty .mascot{flex:none;width:84px;height:84px;margin:0 auto 8px}
+.empty p{margin:0;font-weight:700}
+/* buku */
+.bcard h2{margin:0;font-size:1.1rem}
+.bcard .bar{height:12px;margin:12px 0 8px}
+.stchip{flex:0 0 auto;padding:5px 12px;border-radius:999px;font-size:.78rem;font-weight:700;background:var(--soft);color:var(--ink)}
+.stchip.read{background:var(--yellow-soft);border:1px solid var(--line)}
+.stchip.done{background:var(--green);color:#473C33}
+details.addbook{margin-bottom:12px}
+details.addbook>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;border-radius:999px;background:var(--orange);color:var(--on-color);font-weight:700;font-size:1.1rem;box-shadow:var(--shadow-orange);margin-bottom:12px}
+details.addbook>summary::-webkit-details-marker{display:none}
+details.addbook .card{margin-bottom:0}
 /* beranda */
 .hdate{font-size:.85rem;font-weight:600;color:var(--muted);margin:6px 0 0}
 .greet{font-size:1.75rem;font-weight:700;letter-spacing:-.3px;margin:2px 0 14px}
@@ -98,18 +147,20 @@ nav button.on{background:var(--navon-bg);color:var(--navon-ink);font-weight:700}
 /* timer */
 .timerwrap{min-height:calc(100vh - 32px);min-height:calc(100dvh - 32px);display:flex;flex-direction:column;justify-content:center;align-items:stretch;text-align:center;gap:14px}
 .t-head h2{margin:0;font-size:1.15rem}
-.ring{--rs:min(76vw,290px);width:var(--rs);height:var(--rs);margin:0 auto;position:relative}
+.ring{--rs:min(calc(100vw - 56px),340px,42vh);width:var(--rs);height:var(--rs);margin:0 auto;position:relative}
 .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
 .ring .t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.tdig{font-size:calc(var(--rs) * .345);font-weight:500;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-1px;white-space:nowrap}
-.tdig.long{font-size:calc(var(--rs) * .22)}
+.tdig{font-family:"Quicksand",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:calc(var(--rs) * .24);font-weight:600;line-height:.8;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tdig .d{display:inline-block;width:.62em;text-align:center}
+.tdig .c{display:inline-block;width:.26em;text-align:center}
+.tdig.long{font-size:calc(var(--rs) * .15)}
 .ring .t .muted{margin-top:6px}
 .t-buddy{display:flex;align-items:center;justify-content:center;gap:12px}
 .t-buddy .mascot{flex:0 0 84px;height:84px}
 .mascot.breath svg{animation:breathe 4.2s ease-in-out infinite;transform-origin:50% 92%}
 .bubble.sm{flex:0 1 auto;max-width:210px;font-size:.92rem;padding:10px 14px;text-align:left}
 button.outline{background:transparent;color:var(--ink);border:2px solid var(--ink);border-radius:999px;min-height:48px;padding:10px 16px;font-weight:700}
-@media (max-height:700px){.ring{--rs:min(60vw,230px)}.t-buddy .mascot{flex-basis:64px;height:64px}.timerwrap{gap:10px}}
+@media (max-height:700px){.t-buddy .mascot{flex-basis:64px;height:64px}.timerwrap{gap:10px}}
 .big{font-size:clamp(3rem,16vw,4.6rem);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-1px}
 /* selesai membaca */
 .fin-head{display:flex;align-items:center;gap:12px;margin:2px 0 12px}
@@ -324,7 +375,7 @@ function tick(){
   var over=goalMs&&el>=goalMs;
   if(goalMs&&!over){t.textContent=fmt(Math.ceil((goalMs-el)/1000)*1000);sub.textContent='sisa waktu';}
   else{t.textContent=fmt(el);sub.textContent=goalMs?'goal tercapai · lanjut membaca':'waktu membaca';}
-  t.classList.toggle('long',t.textContent.length>5);
+  t.innerHTML=digitsHtml(t.textContent);t.classList.toggle('long',t.textContent.length>5);
   if(arc){
     var C=2*Math.PI*54,p=goalMs?Math.min(1,el/goalMs):0;
     arc.setAttribute('stroke-dashoffset',String(C*(1-p)));
@@ -384,6 +435,7 @@ var ICONS={
   flame:'<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5.3 1.2 1 2 2 2.5C11 8 11 5 12 3z"/>',
   play:'<path d="M7 4.5v15l13-7.5z" fill="currentColor"/>',
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
   help:'<circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1.1.9-1.1 1.7"/><path d="M12 17.2v.01"/>'
 };
 function icon(n){return '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[n]+'</svg>';}
@@ -423,6 +475,75 @@ function celebrateHtml(a){
     '<h2 class="cel-title" id="celt">'+esc(title)+'</h2><p class="cel-sub">Kamu sudah membaca '+a.goalMin+' menit. Mantap!</p>'+
     '<button class="cel-main" data-a="finish">Selesai</button><button class="cel-alt" data-a="continue">Lanjut baca</button></div>';
 }
+/* ====== Font: muat semua bobot sejak awal agar layar Timer tidak sempat memakai font cadangan ====== */
+if(typeof document!=='undefined'&&document.fonts&&document.fonts.load){
+  ['400','500','600','700'].forEach(function(w){try{document.fonts.load(w+' 16px Quicksand').catch(function(){});}catch(e){}});
+}
+// Quicksand tidak punya angka berlebar sama; tiap digit dibuat sel berlebar tetap agar angka tidak bergeser tiap detik.
+function digitsHtml(txt){
+  return String(txt).split('').map(function(c){return '<span class="'+(c===':'?'c':'d')+'">'+c+'</span>';}).join('');
+}
+
+/* ====== Riwayat & Buku: semua diturunkan dari data yang sudah ada (tanpa field baru) ====== */
+var LVCOL={1:'#ABC270',2:'#FEC868',3:'#FDA769',4:'#E8803F'};
+function nkey(n){var d=new Date(n*86400000);return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');}
+function shortDate(k){var p=k.split('-');return (+p[2])+' '+MON[+p[1]-1];}
+function minOf(sec){return sec>0?Math.max(1,Math.round(sec/60)):0;}
+function durTxt(sec){return sec<60?sec+' dtk':Math.round(sec/60)+' mnt';}
+// Awal perjalanan = tanggal paling awal dari buku yang ditambahkan atau sesi yang tercatat.
+function journeyStart(today){
+  var ks=db.sessions.map(function(s){return s.date;}).concat(db.books.map(function(b){return dkey(b.createdAt);}));
+  ks=ks.filter(function(k){return /^\d{4}-\d\d-\d\d$/.test(k);}).sort();
+  return ks.length?ks[0]:today;
+}
+function mapCells(today,dates){
+  var start=journeyStart(today),t=dnum(today);
+  var first=(t-dnum(start)<30)?Math.min(dnum(start),t):t-29,cells=[];
+  for(var k=0;k<30;k++){
+    var n=first+k,key=nkey(n),idx=dates.indexOf(key),st;
+    if(key===today)st=idx>=0?'todayon':'today';
+    else if(n>t)st='future';
+    else st=idx>=0?'on':'missed';
+    cells.push({key:key,st:st,lv:idx>=0?levelFor(idx+1).lv:0});
+  }
+  return cells;
+}
+function mapCard(today,dates){
+  var cells=mapCells(today,dates),on=0,miss=0,fut=0,todayOn=false;
+  var grid=cells.map(function(c){
+    if(c.st==='on'||c.st==='todayon')on++;
+    if(c.st==='missed')miss++;
+    if(c.st==='future')fut++;
+    if(c.st==='todayon')todayOn=true;
+    var sty=c.lv?' style="background:'+LVCOL[c.lv]+'"':'';
+    return '<i class="mc '+c.st+'"'+sty+'></i>';
+  }).join('');
+  var label='Peta 30 hari, '+shortDate(cells[0].key)+' sampai '+shortDate(cells[29].key)+': '+on+' hari aktif, '+miss+' hari terlewat, '+fut+' hari belum datang. Hari ini '+(todayOn?'sudah':'belum')+' membaca.';
+  var leg=[1,2,3,4].map(function(l){return '<span><i class="sw" style="background:'+LVCOL[l]+'"></i>Level '+l+'</span>';}).join('')+
+    '<span><i class="sw missed"></i>Terlewat</span><span><i class="sw now"></i>Hari ini</span><span><i class="sw fut"></i>Belum datang</span>';
+  return '<section class="card"><h2>Peta hari aktif</h2><p class="sub">'+shortDate(cells[0].key)+' – '+shortDate(cells[29].key)+'</p>'+
+    '<div class="mapgrid" role="img" aria-label="'+esc(label)+'">'+grid+'</div><div class="legend">'+leg+'</div></section>';
+}
+function chartCard(today,info){
+  var secs={};db.sessions.forEach(function(s){secs[s.date]=(secs[s.date]||0)+s.durationSec;});
+  var cols=[],max=info.goalMin,PH=96,t=dnum(today);
+  for(var k=6;k>=0;k--){
+    var n=t-k,key=nkey(n),m=minOf(secs[key]||0);
+    cols.push({m:m,now:k===0,day:DAY[new Date(n*86400000).getUTCDay()]});
+    if(m>max)max=m;
+  }
+  var bars=cols.map(function(c){
+    return '<div class="bcol'+(c.now?' today':'')+'"><span class="bval">'+c.m+'</span>'+
+      (c.m>0?'<i class="bfill" style="height:'+Math.max(6,Math.round(c.m/max*PH))+'px"></i>':'<i class="bzero"></i>')+'</div>';
+  }).join('');
+  var labels=cols.map(function(c){return '<span'+(c.now?' class="now"':'')+'>'+c.day+'</span>';}).join('');
+  var label='Menit baca 7 hari terakhir: '+cols.map(function(c){return c.day+' '+c.m;}).join(', ')+'. Target quest '+info.goalMin+' menit.';
+  return '<section class="card"><h2>Menit baca 7 hari terakhir</h2>'+
+    '<div role="img" aria-label="'+esc(label)+'"><div class="plot"><div class="bars">'+bars+'</div><div class="tline" style="bottom:'+Math.round(info.goalMin/max*PH)+'px"></div></div>'+
+    '<div class="blabels">'+labels+'</div></div>'+
+    '<div class="tleg"><span class="tdash"></span>Target quest hari ini: '+info.goalMin+' menit</div></section>';
+}
+
 function stripHtml(dates,today){
   var p=today.split('-'),out='';
   for(var o=-3;o<=3;o++){
@@ -475,43 +596,56 @@ function viewHome(){
 function bookForm(){
   return '<label>Judul buku</label><input id="bt" type="text" autocomplete="off">'+
     '<label>Total halaman</label><input id="bn" type="number" inputmode="numeric" min="1">'+
-    errHtml()+'<div style="margin-top:14px"><button class="primary" data-a="addbook">Simpan buku</button></div>';
+    errHtml()+'<div style="margin-top:14px"><button class="primary cta" data-a="addbook">Simpan buku</button></div>';
 }
 function viewBooks(){
-  var h='<h1>Buku</h1>'+noticeHtml();
+  var done=finishedCount();
+  var h='<header><div class="hdate">'+(db.books.length?db.books.length+' buku · '+done+' selesai':'Rak bukumu masih kosong')+'</div><h1 class="greet">Buku</h1></header>'+noticeHtml();
+  if(!db.books.length){
+    h+='<div class="card empty"><div class="mascot">'+mascotSvg(2)+'</div><p>Belum ada buku.</p><div class="muted">Tambahkan buku fisik yang ingin kamu selesaikan, yuk!</div></div>';
+  }
   h+=db.books.map(function(b){
     var p=bookProgress(b,db.sessions),pct=Math.min(100,Math.round(p/b.total*100)),n=db.sessions.filter(function(s){return s.bookId===b.id;}).length;
-    return '<div class="card"><div class="row between"><h2 style="margin:0">'+esc(b.title)+'</h2>'+(p>=b.total?'<span class="badge ok">selesai ✓</span>':'')+'</div>'+
-      '<div class="bar"><i style="width:'+pct+'%"></i></div><div class="row between muted"><span>hal. '+p+' / '+b.total+' · '+n+' sesi</span><span>'+pct+'%</span></div>'+
-      (n===0?'<div style="text-align:right"><button class="danger" data-a="delbook" data-id="'+b.id+'">Hapus</button></div>':'')+'</div>';
-  }).join('')||'<p class="muted">Belum ada buku.</p>';
-  h+='<div class="card"><h2>Tambah buku baru</h2>'+bookForm()+'</div>';
+    var st=p>=b.total?['done','Selesai']:n>0?['read','Sedang dibaca']:['','Belum dimulai'];
+    return '<article class="card bcard"><div class="row between"><h2>'+esc(b.title)+'</h2><span class="stchip '+st[0]+'">'+st[1]+'</span></div>'+
+      '<div class="muted" style="margin-top:4px">hal. '+p+' dari '+b.total+'</div>'+
+      '<div class="bar" role="progressbar" aria-label="Progres '+esc(b.title)+'" aria-valuemin="0" aria-valuemax="'+b.total+'" aria-valuenow="'+p+'"><i style="width:'+pct+'%"></i></div>'+
+      '<div class="row between muted"><span>'+n+' sesi</span><span>'+pct+'%</span></div>'+
+      (n===0?'<div style="text-align:right"><button class="danger" data-a="delbook" data-id="'+b.id+'">Hapus</button></div>':'')+'</article>';
+  }).join('');
+  h+='<details class="addbook"'+((!db.books.length||ui.err)?' open':'')+'><summary>'+icon('plus')+'Tambah buku</summary><div class="card">'+bookForm()+'</div></details>';
   return h;
 }
 function viewHistory(){
-  var h='<h1>Riwayat</h1>';
+  var today=dkey(Date.now()),info=todayInfo(db.sessions,today),dates=info.dates;
+  var totalSec=0;db.sessions.forEach(function(s){totalSec+=s.durationSec;});
+  var h='<header><div class="hdate">Perjalanan '+TARGET_DAYS+' hari aktif</div><h1 class="greet">Riwayat</h1></header>';
+  h+='<div class="stats3"><div class="st g"><b>'+dates.length+'</b><span>hari aktif</span></div>'+
+     '<div class="st y"><b>'+minOf(totalSec)+'</b><span>menit baca</span></div>'+
+     '<div class="st o"><b>'+streak(dates,today)+'</b><span>streak hari</span></div></div>';
+  h+=mapCard(today,dates)+chartCard(today,info);
+  h+='<div class="sech"><h2>Sesi terbaru</h2>';
   if(db.books.length>1){
-    h+='<select id="hb" style="margin-bottom:12px"><option value="">Semua buku</option>'+
+    h+='<select id="hb" aria-label="Filter buku"><option value="">Semua buku</option>'+
       db.books.map(function(b){return '<option value="'+b.id+'"'+(ui.histBook===b.id?' selected':'')+'>'+esc(b.title)+'</option>';}).join('')+'</select>';
   }
+  h+='</div>';
   var list=db.sessions.filter(function(s){return !ui.histBook||s.bookId===ui.histBook;}).sort(function(a,b){return b.endedAt-a.endedAt;});
-  if(!list.length)return h+'<p class="muted">Belum ada sesi tercatat.</p>';
-  var cur='';
-  list.forEach(function(s){
-    if(s.date!==cur){cur=s.date;h+='<div class="dayh">'+prettyDate(cur)+'</div>';}
+  if(!list.length)return h+'<div class="card empty"><div class="mascot">'+mascotSvg(2)+'</div><p>Belum ada sesi. Yuk mulai 5 menit saja!</p></div>';
+  h+=list.map(function(s){
     var b=bookById(s.bookId),met=s.durationSec>=s.questGoalMin*60;
-    h+='<div class="card sess"><div class="row between"><b>'+esc(b?b.title:'(buku dihapus)')+'</b><span class="badge '+(met?'ok':'no')+'">quest '+(met?'✓':'–')+'</span></div>'+
-      '<div class="muted">'+fmt(s.durationSec*1000)+' · hal. '+s.startPage+'–'+s.endPage+' ('+(s.endPage-s.startPage)+' hal.)</div>'+
-      (s.note?'<div class="note">'+esc(s.note)+'</div>':'')+'</div>';
-  });
+    return '<article class="card scard"><div class="row between"><b>'+esc(b?b.title:'(buku dihapus)')+'</b><span class="badge '+(met?'ok':'no')+'">'+(met?'Quest tercapai':'Belum tercapai')+'</span></div>'+
+      '<div class="smeta"><span>'+prettyDate(s.date)+'</span><span>'+durTxt(s.durationSec)+'</span><span>hal. '+s.startPage+'–'+s.endPage+' ('+(s.endPage-s.startPage)+' hal.)</span></div>'+
+      (s.note?'<div class="note">'+esc(s.note)+'</div>':'')+'</article>';
+  }).join('');
   return h;
 }
 function viewTimer(){
   var a=db.active,b=bookById(a.bookId),C=2*Math.PI*54;
   return '<div class="timerwrap"><div class="t-head"><div class="muted">Membaca</div><h2>'+esc(b.title)+'</h2><div class="muted">mulai dari hal. '+a.startPage+'</div></div>'+
-    '<div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="#4A3F37" stroke-width="4.5"/>'+
-    '<circle id="arc" cx="60" cy="60" r="54" fill="none" stroke="#ABC270" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'"/></svg>'+
-    '<div class="t"><div class="tdig" id="tm">00:00</div><div class="muted" id="sub"></div></div></div>'+
+    '<div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="#4A3F37" stroke-width="3.9"/>'+
+    '<circle id="arc" cx="60" cy="60" r="54" fill="none" stroke="#ABC270" stroke-width="3.9" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'"/></svg>'+
+    '<div class="t"><div class="tdig" id="tm" role="timer">00:00</div><div class="muted" id="sub"></div></div></div>'+
     '<div class="muted">'+(a.goalMin?'Goal '+a.goalMin+' menit':'Mode bebas')+' · layar tetap menyala</div>'+
     '<div class="t-buddy"><div class="mascot breath">'+mascotSvg('calm')+'</div><div class="bubble sm">Pelan-pelan saja, kamu hebat!</div></div>'+
     '<button class="primary cta" data-a="finish">Selesai</button><button class="outline" data-a="discard">Buang sesi</button></div>';
